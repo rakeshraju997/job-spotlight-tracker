@@ -6,7 +6,8 @@ import {
   Settings, 
   LogOut, 
   Menu,
-  X
+  X,
+  Crown
 } from "lucide-react";
 import { useState } from "react";
 
@@ -29,7 +30,8 @@ export const Navigation = ({ isAuthenticated = false, isAdmin = false, userType 
 
   const userNavItems = [
     { name: "Dashboard", path: "/dashboard", icon: User },
-    { name: "Applied Jobs", path: "/applied", icon: Briefcase }
+    { name: "Applied Jobs", path: "/applied", icon: Briefcase },
+    { name: "Subscription", path: "/subscription", icon: Crown }
   ];
 
   const adminNavItems = [
