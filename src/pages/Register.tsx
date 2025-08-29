@@ -21,7 +21,8 @@ import {
   Eye,
   EyeOff,
   Building2,
-  MapPin
+  MapPin,
+  Upload
 } from "lucide-react";
 
 export const Register = () => {
@@ -264,6 +265,48 @@ export const Register = () => {
                   </li>
                 </ul>
               </div>
+
+              {/* Resume Upload Section (for Job Seekers) */}
+              {formData.accountType === 'job-seeker' && (
+                <div>
+                  <Label htmlFor="resume">Upload Resume (Optional)</Label>
+                  <div className="mt-1 border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors">
+                    <div className="flex flex-col items-center">
+                      <Upload className="w-12 h-12 text-muted-foreground mb-4" />
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium">Drop your resume here or click to browse</p>
+                        <p className="text-xs text-muted-foreground">
+                          Supported formats: PDF, DOC, DOCX (Max 5MB)
+                        </p>
+                      </div>
+                      <input
+                        type="file"
+                        id="resume"
+                        accept=".pdf,.doc,.docx"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            console.log('Resume uploaded:', file.name);
+                          }
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={() => document.getElementById('resume')?.click()}
+                      >
+                        Choose File
+                      </Button>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    You can also build your resume later using our resume builder tool.
+                  </p>
+                </div>
+              )}
 
               {/* Terms & Conditions */}
               <div className="flex items-start space-x-2">

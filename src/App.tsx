@@ -13,6 +13,9 @@ import { AdminDashboard } from "./pages/AdminDashboard";
 import { Contacts } from "./pages/Contacts";
 import Subscription from "./pages/Subscription";
 import NotFound from "./pages/NotFound";
+import { Profile } from "./pages/Profile";
+import { ProfileEdit } from "./pages/ProfileEdit";
+import { ResumeBuilder } from "./pages/ResumeBuilder";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/subscription" element={<Subscription />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/edit" element={<ProfileEdit />} />
+          <Route path="/resume-builder" element={<ResumeBuilder />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
