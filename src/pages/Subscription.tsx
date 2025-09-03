@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Check, Crown, Star, Zap } from "lucide-react";
+import { PromoCodeDialog } from "@/components/PromoCodeDialog";
 
 const Subscription = () => {
   const [isAnnual, setIsAnnual] = useState(false);
