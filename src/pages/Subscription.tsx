@@ -5,9 +5,41 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Check, Crown, Star, Zap } from "lucide-react";
 import { PromoCodeDialog } from "@/components/PromoCodeDialog";
+import { SubscriptionLoader } from "@/components/SubscriptionLoader";
+import { SubscriptionFailedDialog } from "@/components/SubscriptionFailedDialog";
 
 const Subscription = () => {
   const [isAnnual, setIsAnnual] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showFailedDialog, setShowFailedDialog] = useState(false);
+  const [failedMessage, setFailedMessage] = useState("");
+
+  const handleSubscription = async (planName: string) => {
+    setIsLoading(true);
+    
+    // Simulate subscription process
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Simulate random failure for demo
+      if (Math.random() > 0.7) {
+        throw new Error("Payment processing failed. Please check your payment details and try again.");
+      }
+      
+      // Success - you would handle success here
+      console.log(`Subscribed to ${planName}`);
+    } catch (error) {
+      setFailedMessage(error instanceof Error ? error.message : "An unexpected error occurred.");
+      setShowFailedDialog(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setShowFailedDialog(false);
+    // You could retry the last attempted subscription here
+  };
 
   const plans = [
     {
@@ -189,6 +221,8 @@ const Subscription = () => {
                         ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg' 
                         : ''
                     }`}
+                    onClick={() => handleSubscription(plan.name)}
+                    disabled={isLoading}
                   >
                     {plan.buttonText}
                   </Button>
@@ -239,6 +273,15 @@ const Subscription = () => {
           </div>
         </div>
       </div>
+
+      <SubscriptionLoader isOpen={isLoading} />
+      
+      <SubscriptionFailedDialog
+        isOpen={showFailedDialog}
+        onClose={() => setShowFailedDialog(false)}
+        onRetry={handleRetry}
+        errorMessage={failedMessage}
+      />
     </div>
   );
 };
