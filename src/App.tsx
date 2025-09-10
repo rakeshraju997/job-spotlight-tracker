@@ -16,6 +16,8 @@ import NotFound from "./pages/NotFound";
 import { Profile } from "./pages/Profile";
 import { ProfileEdit } from "./pages/ProfileEdit";
 import { ResumeBuilder } from "./pages/ResumeBuilder";
+import { Terms } from "./pages/Terms";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,8 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
           <Route path="/resume-builder" element={<ResumeBuilder />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
