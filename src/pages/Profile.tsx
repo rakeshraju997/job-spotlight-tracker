@@ -19,11 +19,26 @@ import {
   Award,
   Star,
   FileText,
-  Plus
+  Plus,
+  Coins
 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 
 export const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [credits, setCredits] = useState(35);
+  const { toast } = useToast();
+  const maxCredits = 50;
+
+  const handleAddCredits = () => {
+    const newCredits = Math.min(credits + 10, maxCredits);
+    setCredits(newCredits);
+    toast({
+      title: "Credits Added!",
+      description: `${10} credits have been added to your account.`,
+    });
+  };
 
   // Mock user data
   const userData = {
@@ -400,6 +415,43 @@ export const Profile = () => {
                     <Award className="w-4 h-4 mr-2" />
                     Skill Assessment
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Credit Limit */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Coins className="w-5 h-5 mr-2 text-primary" />
+                  Credit Points
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Available Credits</span>
+                    <span className="font-semibold">
+                      {credits} / {maxCredits}
+                    </span>
+                  </div>
+                  <Progress value={(credits / maxCredits) * 100} className="h-2" />
+                </div>
+                
+                <div className="pt-2">
+                  <Button 
+                    onClick={handleAddCredits}
+                    className="w-full"
+                    disabled={credits >= maxCredits}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Credits
+                  </Button>
+                  {credits >= maxCredits && (
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      Maximum credits reached
+                    </p>
+                  )}
                 </div>
               </CardContent>
             </Card>

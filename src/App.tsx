@@ -18,6 +18,7 @@ import { ProfileEdit } from "./pages/ProfileEdit";
 import { ResumeBuilder } from "./pages/ResumeBuilder";
 import { Terms } from "./pages/Terms";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { PasswordReset } from "./pages/PasswordReset";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/resume-builder" element={<ResumeBuilder />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

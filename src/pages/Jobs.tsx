@@ -13,8 +13,19 @@ import {
   ExternalLink,
   CheckCircle2,
   Bookmark,
-  ChevronDown
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -29,6 +40,8 @@ export const Jobs = () => {
   const [selectedLocation, setSelectedLocation] = useState("all");
   const [appliedJobs, setAppliedJobs] = useState<number[]>([]);
   const [savedJobs, setSavedJobs] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 3;
 
   const categories = [
     "All Categories",
@@ -161,6 +174,17 @@ export const Jobs = () => {
     return matchesSearch && matchesCategory && matchesLocation;
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
+  const startIndex = (currentPage - 1) * jobsPerPage;
+  const endIndex = startIndex + jobsPerPage;
+  const currentJobs = filteredJobs.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  const handleFilterChange = () => {
+    setCurrentPage(1);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -236,13 +260,14 @@ export const Jobs = () => {
                 </div>
 
                 {/* Clear Filters */}
-                <Button 
+                 <Button 
                   variant="outline" 
                   className="w-full"
                   onClick={() => {
                     setSearchTerm("");
                     setSelectedCategory("all");
                     setSelectedLocation("all");
+                    handleFilterChange();
                   }}
                 >
                   Clear Filters
@@ -271,7 +296,7 @@ export const Jobs = () => {
             </div>
 
             <div className="space-y-6">
-              {filteredJobs.map((job, index) => {
+              {currentJobs.map((job, index) => {
                 const isApplied = appliedJobs.includes(job.id);
                 const isSaved = savedJobs.includes(job.id);
                 
@@ -377,6 +402,58 @@ export const Jobs = () => {
                 );
               })}
             </div>
+
+            {/* Pagination */}
+            {filteredJobs.length > 0 && totalPages > 1 && (
+              <div className="mt-8 flex justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                    
+                    {[...Array(totalPages)].map((_, i) => {
+                      const page = i + 1;
+                      // Show first page, last page, current page, and pages around current
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
+                        return (
+                          <PaginationItem key={page}>
+                            <PaginationLink
+                              onClick={() => setCurrentPage(page)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      } else if (page === currentPage - 2 || page === currentPage + 2) {
+                        return (
+                          <PaginationItem key={page}>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      }
+                      return null;
+                    })}
+                    
+                    <PaginationItem>
+                      <PaginationNext 
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
 
             {filteredJobs.length === 0 && (
               <div className="text-center py-12">
