@@ -20,24 +20,32 @@ import {
   Star,
   FileText,
   Plus,
-  Coins
+  Coins,
+  Gift
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { PromoCodeDialog } from "@/components/PromoCodeDialog";
 
 export const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [credits, setCredits] = useState(35);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [promoDialogOpen, setPromoDialogOpen] = useState(false);
   const { toast } = useToast();
   const maxCredits = 50;
 
   const handleAddCredits = () => {
     const newCredits = Math.min(credits + 10, maxCredits);
     setCredits(newCredits);
+    setIsAnimating(true);
+    
     toast({
       title: "Credits Added!",
       description: `${10} credits have been added to your account.`,
     });
+    
+    setTimeout(() => setIsAnimating(false), 600);
   };
 
   // Mock user data
@@ -83,11 +91,12 @@ export const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <PromoCodeDialog open={promoDialogOpen} onOpenChange={setPromoDialogOpen} />
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-8">
           {/* Profile Info */}
-          <Card className="flex-1">
+          <Card className="flex-1 shadow-lg border-[hsl(var(--profile-border))] hover:shadow-xl transition-shadow">
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                 <Avatar className="w-24 h-24">
@@ -149,7 +158,7 @@ export const Profile = () => {
           </Card>
 
           {/* Profile Completion */}
-          <Card className="w-full lg:w-80">
+          <Card className="w-full lg:w-80 shadow-lg border-[hsl(var(--profile-border))] hover:shadow-xl transition-shadow">
             <CardHeader>
               <CardTitle className="text-lg">Profile Completion</CardTitle>
             </CardHeader>
@@ -157,12 +166,12 @@ export const Profile = () => {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span>Progress</span>
-                    <span className="font-medium">{userData.profileCompletion}%</span>
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="font-semibold text-primary">{userData.profileCompletion}%</span>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-2">
+                  <div className="w-full bg-[hsl(var(--profile-accent))] rounded-full h-3 overflow-hidden">
                     <div 
-                      className="hero-gradient h-2 rounded-full transition-all duration-300"
+                      className="hero-gradient h-3 rounded-full transition-all duration-500 ease-out"
                       style={{ width: `${userData.profileCompletion}%` }}
                     />
                   </div>
@@ -216,21 +225,25 @@ export const Profile = () => {
             {activeTab === "overview" && (
               <div className="space-y-6">
                 {/* Recent Activity */}
-                <Card>
+                <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle>Recent Activity</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                        <Eye className="w-5 h-5 text-primary" />
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3 p-4 bg-[hsl(var(--profile-accent))] rounded-xl hover:bg-[hsl(var(--card-hover))] transition-colors">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Eye className="w-5 h-5 text-primary" />
+                        </div>
                         <div>
                           <p className="font-medium">Profile viewed by TechCorp</p>
                           <p className="text-sm text-muted-foreground">2 hours ago</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                        <FileText className="w-5 h-5 text-primary" />
+                      <div className="flex items-center gap-3 p-4 bg-[hsl(var(--profile-accent))] rounded-xl hover:bg-[hsl(var(--card-hover))] transition-colors">
+                        <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-accent" />
+                        </div>
                         <div>
                           <p className="font-medium">Applied to Senior Developer position</p>
                           <p className="text-sm text-muted-foreground">1 day ago</p>
@@ -241,14 +254,14 @@ export const Profile = () => {
                 </Card>
 
                 {/* Top Skills */}
-                <Card>
+                <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle>Top Skills</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {skills.slice(0, 6).map((skill) => (
-                        <Badge key={skill} variant="secondary" className="px-3 py-1">
+                        <Badge key={skill} variant="secondary" className="px-4 py-2 text-sm hover:bg-primary hover:text-primary-foreground transition-colors">
                           {skill}
                         </Badge>
                       ))}
@@ -259,7 +272,7 @@ export const Profile = () => {
             )}
 
             {activeTab === "experience" && (
-              <Card>
+              <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>Work Experience</CardTitle>
@@ -272,8 +285,8 @@ export const Profile = () => {
                 <CardContent>
                   <div className="space-y-6">
                     {experience.map((exp, index) => (
-                      <div key={index} className="flex gap-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <div key={index} className="flex gap-4 p-4 bg-[hsl(var(--profile-accent))] rounded-xl hover:bg-[hsl(var(--card-hover))] transition-colors">
+                        <div className="w-12 h-12 bg-primary/15 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
                           <Briefcase className="w-6 h-6 text-primary" />
                         </div>
                         <div className="flex-1">
@@ -290,7 +303,7 @@ export const Profile = () => {
             )}
 
             {activeTab === "education" && (
-              <Card>
+              <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>Education</CardTitle>
@@ -303,9 +316,9 @@ export const Profile = () => {
                 <CardContent>
                   <div className="space-y-6">
                     {education.map((edu, index) => (
-                      <div key={index} className="flex gap-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <GraduationCap className="w-6 h-6 text-primary" />
+                      <div key={index} className="flex gap-4 p-4 bg-[hsl(var(--profile-accent))] rounded-xl hover:bg-[hsl(var(--card-hover))] transition-colors">
+                        <div className="w-12 h-12 bg-accent/15 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                          <GraduationCap className="w-6 h-6 text-accent" />
                         </div>
                         <div className="flex-1">
                           <h3 className="font-semibold text-lg">{edu.degree}</h3>
@@ -323,7 +336,7 @@ export const Profile = () => {
             )}
 
             {activeTab === "skills" && (
-              <Card>
+              <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>Skills & Expertise</CardTitle>
@@ -351,7 +364,7 @@ export const Profile = () => {
             )}
 
             {activeTab === "resume" && (
-              <Card>
+              <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>Resume</CardTitle>
@@ -393,7 +406,7 @@ export const Profile = () => {
           {/* Right Sidebar */}
           <div className="space-y-6">
             {/* Quick Actions */}
-            <Card>
+            <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
@@ -420,32 +433,48 @@ export const Profile = () => {
             </Card>
 
             {/* Credit Limit */}
-            <Card>
+            <Card className={`shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-all ${isAnimating ? 'animate-credit-pulse' : ''}`}>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Coins className="w-5 h-5 mr-2 text-primary" />
+                  <Coins className="w-5 h-5 mr-2 text-accent" />
                   Credit Points
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Available Credits</span>
-                    <span className="font-semibold">
-                      {credits} / {maxCredits}
+                <div className="p-4 bg-gradient-to-br from-accent/5 to-accent/10 rounded-xl border border-accent/20">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-sm text-muted-foreground">Available Credits</span>
+                    <span className={`text-2xl font-bold text-accent transition-all ${isAnimating ? 'animate-bounce-in' : ''}`}>
+                      {credits}
                     </span>
                   </div>
-                  <Progress value={(credits / maxCredits) * 100} className="h-2" />
+                  <div className="w-full bg-[hsl(var(--profile-accent))] rounded-full h-3 overflow-hidden">
+                    <div 
+                      className="bg-gradient-to-r from-accent to-accent-glow h-3 rounded-full transition-all duration-500 ease-out"
+                      style={{ width: `${(credits / maxCredits) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {maxCredits - credits} credits until maximum
+                  </p>
                 </div>
                 
-                <div className="pt-2">
+                <div className="space-y-2">
                   <Button 
                     onClick={handleAddCredits}
-                    className="w-full"
+                    className="w-full bg-accent hover:bg-accent/90"
                     disabled={credits >= maxCredits}
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Credits
+                  </Button>
+                  <Button 
+                    onClick={() => setPromoDialogOpen(true)}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Gift className="w-4 h-4 mr-2" />
+                    Claim with Promo
                   </Button>
                   {credits >= maxCredits && (
                     <p className="text-xs text-muted-foreground text-center mt-2">
@@ -457,7 +486,7 @@ export const Profile = () => {
             </Card>
 
             {/* Profile Views */}
-            <Card>
+            <Card className="shadow-md border-[hsl(var(--profile-border))] hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle>Profile Analytics</CardTitle>
               </CardHeader>

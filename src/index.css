@@ -8,11 +8,12 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 99%;
-    --foreground: 224 9% 10%;
+    --background: 250 60% 93%;
+    --foreground: 250 50% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 224 9% 10%;
+    --card-foreground: 250 50% 15%;
+    --card-hover: 250 30% 98%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 224 9% 10%;
@@ -72,6 +73,11 @@ All colors MUST be HSL.
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Profile colors */
+    --profile-accent: 250 60% 90%;
+    --profile-border: 250 40% 88%;
+    --credit-glow: 142 76% 45%;
 
     --sidebar-background: 0 0% 98%;
 
