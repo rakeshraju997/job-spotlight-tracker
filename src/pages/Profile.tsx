@@ -21,7 +21,8 @@ import {
   FileText,
   Plus,
   Coins,
-  Gift
+  Gift,
+  Minus
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
@@ -46,6 +47,28 @@ export const Profile = () => {
     });
     
     setTimeout(() => setIsAnimating(false), 600);
+  };
+
+  const handleUseCredits = () => {
+    if (credits >= 5) {
+      const newCredits = credits - 5;
+      setCredits(newCredits);
+      setIsAnimating(true);
+      
+      toast({
+        title: "Credits Used!",
+        description: `5 credits have been deducted from your account.`,
+        variant: "default",
+      });
+      
+      setTimeout(() => setIsAnimating(false), 600);
+    } else {
+      toast({
+        title: "Insufficient Credits",
+        description: "You need at least 5 credits to perform this action.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Mock user data
@@ -460,14 +483,25 @@ export const Profile = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Button 
-                    onClick={handleAddCredits}
-                    className="w-full bg-accent hover:bg-accent/90"
-                    disabled={credits >= maxCredits}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Credits
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button 
+                      onClick={handleAddCredits}
+                      className="bg-accent hover:bg-accent/90"
+                      disabled={credits >= maxCredits}
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add
+                    </Button>
+                    <Button 
+                      onClick={handleUseCredits}
+                      variant="outline"
+                      disabled={credits < 5}
+                      className="border-accent/30 hover:bg-accent/10"
+                    >
+                      <Minus className="w-4 h-4 mr-2" />
+                      Use
+                    </Button>
+                  </div>
                   <Button 
                     onClick={() => setPromoDialogOpen(true)}
                     variant="outline"

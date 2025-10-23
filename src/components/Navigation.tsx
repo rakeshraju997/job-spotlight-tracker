@@ -7,7 +7,8 @@ import {
   LogOut, 
   Menu,
   X,
-  Crown
+  Crown,
+  Coins
 } from "lucide-react";
 import { useState } from "react";
 
@@ -15,9 +16,10 @@ interface NavigationProps {
   isAuthenticated?: boolean;
   isAdmin?: boolean;
   userType?: 'user' | 'admin';
+  credits?: number;
 }
 
-export const Navigation = ({ isAuthenticated = false, isAdmin = false, userType = 'user' }: NavigationProps) => {
+export const Navigation = ({ isAuthenticated = false, isAdmin = false, userType = 'user', credits = 35 }: NavigationProps) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -88,6 +90,18 @@ export const Navigation = ({ isAuthenticated = false, isAdmin = false, userType 
               </>
             ) : (
               <div className="flex items-center space-x-3">
+                <Link to="/profile">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-br from-accent/5 to-accent/10 rounded-lg border border-accent/20 hover:border-accent/40 transition-all cursor-pointer">
+                    <Coins className="w-4 h-4 text-accent" />
+                    <span className="text-sm font-semibold text-accent">{credits}</span>
+                    <div className="w-12 bg-[hsl(var(--profile-accent))] rounded-full h-1.5 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-accent to-accent-glow h-1.5 rounded-full transition-all duration-300"
+                        style={{ width: `${(credits / 50) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </Link>
                 <span className="text-sm text-muted-foreground">
                   Welcome, {userType === 'admin' ? 'Admin' : 'User'}!
                 </span>

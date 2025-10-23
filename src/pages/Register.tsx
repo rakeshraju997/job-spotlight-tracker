@@ -22,7 +22,9 @@ import {
   EyeOff,
   Building2,
   MapPin,
-  Upload
+  Upload,
+  Coins,
+  Sparkles
 } from "lucide-react";
 
 export const Register = () => {
@@ -40,6 +42,7 @@ export const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCreditAnimation, setShowCreditAnimation] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -61,12 +64,42 @@ export const Register = () => {
     // Simulate registration process
     setTimeout(() => {
       setIsLoading(false);
+      setShowCreditAnimation(true);
       console.log('Registration attempt:', formData);
+      
+      // Hide animation after 3 seconds
+      setTimeout(() => {
+        setShowCreditAnimation(false);
+      }, 3000);
     }, 1000);
   };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
+      {/* Credit Animation Overlay */}
+      {showCreditAnimation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card p-8 rounded-2xl shadow-2xl border border-accent/20 animate-scale-in">
+            <div className="text-center space-y-4">
+              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-accent/20 to-accent/30 rounded-full flex items-center justify-center animate-bounce-in">
+                <Coins className="w-10 h-10 text-accent" />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold text-foreground flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6 text-accent" />
+                  Welcome Bonus!
+                  <Sparkles className="w-6 h-6 text-accent" />
+                </h2>
+                <p className="text-5xl font-bold text-accent animate-bounce-in">+10 Credits</p>
+                <p className="text-muted-foreground">
+                  Congratulations! You've received 10 bonus credits to get started.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="w-full max-w-2xl">
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
