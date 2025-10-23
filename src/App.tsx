@@ -19,6 +19,7 @@ import { ResumeBuilder } from "./pages/ResumeBuilder";
 import { Terms } from "./pages/Terms";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { PasswordReset } from "./pages/PasswordReset";
+import { ComingSoon } from "./pages/ComingSoon";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/password-reset" element={<PasswordReset />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
